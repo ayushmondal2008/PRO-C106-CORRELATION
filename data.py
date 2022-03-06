@@ -1,12 +1,21 @@
-import pandas as pd
 import csv
-import plotly
 import plotly_express as px
-import plotly.graph_objects as go
+import numpy as np
 
-df = pd.read_csv("C:/Users/Admin/OneDrive/Desktop/Python/Pro-107/project-files/data.csv")
-# print(df.groupby("level")["attempt"].mean())
-mean = df.groupby(["student_id", "level"], as_index= False)["attempt"].mean()
-
-fig = px.scatter(mean, x = "student_id" , y = "level", size = 'attempt', color = 'attempt')
-plotly.offline.plot(fig)
+def getDatasource(data_path):
+    days= []
+    marks= []
+    with open (data_path) as f:
+        file = csv.DictReader(f)
+        for x in file:
+            days.append(float(x['Days']))
+            marks.append(float(x['Marks']))
+    return {'x':days,'y':marks}
+def findCorrelation(dataSource):
+    correlation = np.corrcoef(dataSource['x'],dataSource['y'])
+    print ('The correlation is ::',correlation[0,1])
+def setup():
+    data_path = 'C:/Users/Admin/OneDrive/Desktop/Python/Pro-106/project-files/Studnt-data.csv'
+    dataSource = getDatasource(data_path)
+    findCorrelation(dataSource)
+setup()
